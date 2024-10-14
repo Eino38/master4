@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+// Importing Google's well-known types for better time management
+import "google/protobuf/timestamp.proto";
+
+// Package declaration
+package express;
+
+// ExpressDeliveryRequest captures the input details for the express delivery request
+message ExpressDeliveryRequest {
+    string customer_id = 1;              // ID of the customer
+    string pickup_location = 2;          // Pickup location for the package
+    string delivery_location = 3;        // Delivery location for the package
+    string package_type = 4;             // Type of package (fragile, electronics, etc.)
+    int32 package_weight = 5;            // Weight of the package in kg
+    string delivery_instructions = 6;    // Specific instructions for the delivery
+}
+
+// ExpressDeliveryResponse captures the details that will be returned after processing the request
+message ExpressDeliveryResponse {
+    string delivery_id = 1;                               // Unique delivery ID
+    google.protobuf.Timestamp estimated_pickup_time = 2;  // Estimated pickup time (as a timestamp)
+    google.protobuf.Timestamp estimated_delivery_time = 3;// Estimated delivery time (as a timestamp)
+    string status = 4;                                    // Status of the delivery (e.g., Confirmed, Pending)
+}
+
+// An optional message to capture error responses if the request cannot be processed
+message ErrorResponse {
+    string error_code = 1;    // Error code to identify the type of error
+    string error_message = 2; // A descriptive error message
+}
+
+// The ExpressDeliveryService provides a method for requesting express deliveries
+service ExpressDeliveryService {
+    // RequestExpressDelivery handles delivery requests and returns a response or an error
+    rpc RequestExpressDelivery (ExpressDeliveryRequest) returns (ExpressDeliveryResponse);
+}
